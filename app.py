@@ -1,14 +1,21 @@
 import time
 from dotenv import load_dotenv
 import os
-import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, request, url_for, session, redirect, render_template
 from flask_sslify import SSLify
+from celery import Celery
+from tasks import save_discover_weekly_task
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 app.config['SESSION_COOKIE_NAME'] = 'Spotify Cookie'
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
 app.secret_key = 'YOUR_SECRET_KEY'
 TOKEN_INFO = 'token_info'
 
@@ -16,7 +23,6 @@ TOKEN_INFO = 'token_info'
 @app.route('/')
 def login():
     auth_url = create_spotify_oauth().get_authorize_url()
-    # Render the HTML template and pass data
     return render_template('index.html', auth_url=auth_url)
 
 
@@ -33,43 +39,14 @@ def redirect_page():
 def save_discover_weekly():
     try:
         token_info = get_token()
+        save_discover_weekly_task.delay()
+        success_message = 'Thank you for using our app!'
+        final_message = 'Your task to save Discover Weekly has been scheduled'
+        return render_template('response.html', success_message=success_message, final_message=final_message)
     except:
         final_message = 'Go back to our homepage'
         error_message = 'You are not logged in'
         return render_template('response.html', error_message=error_message, final_message=final_message)
-
-    sp = spotipy.Spotify(auth=token_info['access_token'])
-    weekly_finds_playlist_id = None
-    discover_weekly_playlist_id = None
-    user_id = sp.current_user()['id']
-
-    current_playlists = sp.current_user_playlists()['items']
-    for playlist in current_playlists:
-        if (playlist['name'] == 'Discover Weekly'):
-            discover_weekly_playlist_id = playlist['id']
-        if (playlist['name'] == 'Weekly Finds'):
-            weekly_finds_playlist_id = playlist['id']
-
-    if not discover_weekly_playlist_id:
-        final_message = 'Be sure to right click your Discover Weekly and click "Add to profile"'
-        error_message = 'Discover Weekly not found'
-        return render_template('response.html', error_message=error_message, final_message=final_message)
-
-    if not weekly_finds_playlist_id:
-        new_playlist = sp.user_playlist_create(user_id, 'Weekly Finds', True)
-        weekly_finds_playlist_id = new_playlist['id']
-
-    discover_weekly_playlist = sp.playlist_items(discover_weekly_playlist_id)
-    song_uris = []
-    for song in discover_weekly_playlist['items']:
-        song_uri = song['track']['uri']
-        song_uris.append(song_uri)
-
-    sp.user_playlist_add_tracks(user_id, weekly_finds_playlist_id, song_uris)
-
-    final_message = 'Thank you for using our app!'
-    success_message = 'Discover Weekly songs added successfully'
-    return render_template('response.html', success_message=success_message, final_message=final_message)
 
 
 def get_token():
