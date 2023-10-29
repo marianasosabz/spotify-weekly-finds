@@ -50,14 +50,14 @@ def save_discover_weekly():
 
 
 def get_token():
-    token_info = session.get(TOKEN_INFO, None)
+    token_info = session.get('token_info', None)
     if not token_info:
-        redirect(url_for('login', _external=False))
+        return None
 
     now = int(time.time())
 
     is_expired = token_info['expires_at'] - now < 60
-    if (is_expired):
+    if is_expired:
         spotify_oauth = create_spotify_oauth()
         token_info = spotify_oauth.refresh_access_token(
             token_info['refresh_token'])
