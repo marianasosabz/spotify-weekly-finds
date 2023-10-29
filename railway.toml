@@ -1,0 +1,5 @@
+name = "marianas-spotify-api"
+
+environment = "production"
+
+start = "python app.py"
