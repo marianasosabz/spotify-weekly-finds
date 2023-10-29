@@ -34,7 +34,7 @@ def save_discover_weekly():
     try:
         token_info = get_token()
     except:
-        error_message = 'User not logged in'
+        error_message = 'You are not logged in'
         return render_template('response.html', error_message=error_message)
 
     sp = spotipy.Spotify(auth=token_info['access_token'])

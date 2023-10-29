@@ -9,7 +9,7 @@
     <title>Mariana's Weekly Finds</title>
     <script src="{{ url_for('static', filename='app.js') }}"></script>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
-    <link rel=" preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
@@ -47,7 +47,7 @@
                             <div class="badge bg-gradient-primary-to-secondary text-white mb-4">
                                 <div class="text-uppercase">Discover &middot; Weekly &middot; Archive</div>
                             </div>
-                            <div class="fs-3 fw-light text-muted">Thank you for using our app!
+                            <div class="fs-3 fw-light text-muted" id="final-message">
                             </div>
                             <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">{{ error_message
                                     }}
