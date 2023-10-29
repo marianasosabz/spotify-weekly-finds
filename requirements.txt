@@ -15,7 +15,7 @@ packaging==23.2
 pathspec==0.11.2
 platformdirs==3.11.0
 powerline-shell==0.7.0
-python-dotenv==1.0.0
+python-dotenv==0.21.1
 redis==5.0.1
 requests==2.30.0
 six==1.16.0
