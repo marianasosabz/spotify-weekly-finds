@@ -34,8 +34,9 @@ def save_discover_weekly():
     try:
         token_info = get_token()
     except:
+        final_message = 'Go back to our homepage'
         error_message = 'You are not logged in'
-        return render_template('response.html', error_message=error_message)
+        return render_template('response.html', error_message=error_message, final_message=final_message)
 
     sp = spotipy.Spotify(auth=token_info['access_token'])
     weekly_finds_playlist_id = None
@@ -50,8 +51,9 @@ def save_discover_weekly():
             weekly_finds_playlist_id = playlist['id']
 
     if not discover_weekly_playlist_id:
-        error_message = 'Discover Weekly not found.'
-        return render_template('response.html', error_message=error_message)
+        final_message = 'Be sure to right click your Discover Weekly and click "Add to profile"'
+        error_message = 'Discover Weekly not found'
+        return render_template('response.html', error_message=error_message, final_message=final_message)
 
     if not weekly_finds_playlist_id:
         new_playlist = sp.user_playlist_create(user_id, 'Weekly Finds', True)
@@ -65,8 +67,9 @@ def save_discover_weekly():
 
     sp.user_playlist_add_tracks(user_id, weekly_finds_playlist_id, song_uris)
 
+    final_message = 'Thank you for using our app!'
     success_message = 'Discover Weekly songs added successfully'
-    return render_template('response.html', success_message=success_message)
+    return render_template('response.html', success_message=success_message, final_message=final_message)
 
 
 def get_token():
