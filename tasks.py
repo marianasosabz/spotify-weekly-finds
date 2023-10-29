@@ -2,8 +2,10 @@ from celery import Celery
 import time
 import spotipy
 from flask import session
-from app import create_spotify_oauth
 from flask import render_template
+from dotenv import load_dotenv
+import os
+from spotipy.oauth2 import SpotifyOAuth
 
 celery = Celery('app', broker='redis://localhost:6379/0',
                 include=['app.tasks'])
@@ -60,3 +62,15 @@ def get_token():
             token_info['refresh_token'])
 
     return token_info
+
+
+def create_spotify_oauth():
+    load_dotenv()
+    return SpotifyOAuth(
+        client_id=os.getenv("CLIENT_ID"),
+        client_secret=os.getenv("CLIENT_SECRET"),
+        redirect_uri="https://marianas-spotify-api.onrender.com/redirect",
+        scope='user-library-read playlist-modify-public playlist-modify-private',
+        cache_path=".cache",
+        show_dialog=True
+    )
