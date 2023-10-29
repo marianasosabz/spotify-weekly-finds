@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Spotify API App</title>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+
+<body>
+    <div class="container" id="error-container" style="display: none;">
+        <h1>Error</h1>
+        <p>{{ error_message }}</p>
+    </div>
+
+    <div class="container" id="success-container" style="display: none;">
+        <h1>Success!</h1>
+        <p>{{ success_message }}</p>
+    </div>
+</body>
+
+</html>
