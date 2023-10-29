@@ -1,4 +1,3 @@
-import time
 from dotenv import load_dotenv
 import os
 from spotipy.oauth2 import SpotifyOAuth
@@ -37,32 +36,10 @@ def redirect_page():
 
 @app.route('/saveDiscoverWeekly')
 def save_discover_weekly():
-    try:
-        token_info = get_token()
-        save_discover_weekly_task.delay()
-        success_message = 'Thank you for using our app!'
-        final_message = 'Your task to save Discover Weekly has been scheduled'
-        return render_template('response.html', success_message=success_message, final_message=final_message)
-    except:
-        final_message = 'Go back to our homepage'
-        error_message = 'You are not logged in'
-        return render_template('response.html', error_message=error_message, final_message=final_message)
-
-
-def get_token():
-    token_info = session.get('token_info', None)
-    if not token_info:
-        return None
-
-    now = int(time.time())
-
-    is_expired = token_info['expires_at'] - now < 60
-    if is_expired:
-        spotify_oauth = create_spotify_oauth()
-        token_info = spotify_oauth.refresh_access_token(
-            token_info['refresh_token'])
-
-    return token_info
+    save_discover_weekly_task.delay()
+    success_message = 'Thank you for using our app!'
+    final_message = 'Your task to save Discover Weekly has been scheduled'
+    return render_template('response.html', success_message=success_message, final_message=final_message)
 
 
 def create_spotify_oauth():
