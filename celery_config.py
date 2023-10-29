@@ -1,4 +1,4 @@
-from celery_config import Celery
+from celery import Celery
 from celery.schedules import crontab
 
 celery = Celery(

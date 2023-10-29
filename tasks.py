@@ -1,4 +1,4 @@
-from celery_config import Celery
+from celery import Celery
 import time
 import spotipy
 from flask import session
