@@ -7,7 +7,7 @@ celery = Celery(
     include=['app.tasks']
 )
 
-schedule = crontab(hour=20, minute=0, day_of_week=1, timezone='CST')
+schedule = crontab(hour=20, minute=0, day_of_week=1)
 
 celery.conf.beat_schedule = {
     'save-discover-weekly': {
