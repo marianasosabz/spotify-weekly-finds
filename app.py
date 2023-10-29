@@ -4,7 +4,7 @@ import os
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, request, url_for, session, redirect, render_template
 from flask_sslify import SSLify
-from celery_config import celery
+from celery_config import Celery
 from tasks import save_discover_weekly_task
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
