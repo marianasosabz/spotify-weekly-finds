@@ -31,7 +31,7 @@ def redirect_page():
 
 @app.route('/saveDiscoverWeekly')
 def save_discover_weekly():
-    try: 
+    try:
         token_info = get_token()
     except:
         error_message = 'User not logged in'
@@ -90,7 +90,7 @@ def create_spotify_oauth():
     return SpotifyOAuth(
         client_id=os.getenv("CLIENT_ID"),
         client_secret=os.getenv("CLIENT_SECRET"),
-        redirect_uri=url_for('redirect_page', _external=True),
+        redirect_uri="https://marianas-spotify-api.onrender.com/redirect",
         scope='user-library-read playlist-modify-public playlist-modify-private',
         cache_path=".cache",
         show_dialog=True
@@ -100,5 +100,4 @@ def create_spotify_oauth():
 if __name__ == "__main__":
     if app.debug:
         sslify = SSLify(app, subdomains=True)
-    app.run(host="0.0.0.0", port=5000, debug=True)
- 
+    app.run(host="0.0.0.0", port=8080, debug=True)
