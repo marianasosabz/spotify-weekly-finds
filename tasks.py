@@ -1,9 +1,8 @@
 from celery import Celery
 import spotipy
 from flask import render_template
-from flask import session, render_template
-import time
-from spotify import create_spotify_oauth
+from flask import render_template
+from spotify import get_token
 
 celery = Celery('app', broker='redis://red-ckvgp5eb0mos739hsp7g:6379',
                 include=['app.tasks'])
@@ -44,19 +43,3 @@ def save_discover_weekly_task():
     final_message = 'Thank you for using our app!'
     success_message = 'Discover Weekly songs added successfully'
     return success_message, final_message
-
-
-def get_token():
-    token_info = session.get('token_info', None)
-    if not token_info:
-        return None
-
-    now = int(time.time())
-
-    is_expired = token_info['expires_at'] - now < 60
-    if is_expired:
-        spotify_oauth = create_spotify_oauth()
-        token_info = spotify_oauth.refresh_access_token(
-            token_info['refresh_token'])
-
-    return token_info

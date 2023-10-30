@@ -2,7 +2,8 @@ from flask import Flask, request, url_for, session, redirect, render_template
 from flask_sslify import SSLify
 from celery_config import Celery
 from tasks import save_discover_weekly_task
-from spotify import create_spotify_oauth
+from spotify import create_spotify_oauth, get_token
+import spotipy
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
@@ -34,6 +35,20 @@ def redirect_page():
 
 @app.route('/saveDiscoverWeekly')
 def save_discover_weekly():
+    token_info = get_token()
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    discover_weekly_playlist_id = None
+
+    current_playlists = sp.current_user_playlists()['items']
+    for playlist in current_playlists:
+        if playlist['name'] == 'Discover Weekly':
+            discover_weekly_playlist_id = playlist['id']
+
+    if not discover_weekly_playlist_id:
+        final_message = 'Be sure to have Discover Weekly in your library, plus right-click it and click "Add to profile"'
+        error_message = 'Discover Weekly playlist not found'
+        return render_template('response.html', error_message=error_message, final_message=final_message)
+
     save_discover_weekly_task.delay()
     success_message = 'Thank you for using our app!'
     final_message = 'Your task to save Discover Weekly has been scheduled'
