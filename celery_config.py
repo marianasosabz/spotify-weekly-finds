@@ -3,7 +3,7 @@ from celery.schedules import crontab
 
 celery = Celery(
     'app',
-    broker='redis://localhost:6379/0',
+    broker='redis://red-ckvgp5eb0mos739hsp7g:6379',
     include=['app.tasks']
 )
 

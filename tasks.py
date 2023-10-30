@@ -5,7 +5,7 @@ from flask import session, render_template
 import time
 from spotify import create_spotify_oauth
 
-celery = Celery('app', broker='redis://localhost:6379/0',
+celery = Celery('app', broker='redis://red-ckvgp5eb0mos739hsp7g:6379',
                 include=['app.tasks'])
 
 
