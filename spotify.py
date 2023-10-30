@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 from spotipy.oauth2 import SpotifyOAuth
-from flask import session, render_template
+from flask import session
 import time
 
 

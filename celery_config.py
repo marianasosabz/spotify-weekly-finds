@@ -3,15 +3,15 @@ from celery.schedules import crontab
 
 celery = Celery(
     'app',
-    broker='redis://red-ckvgp5eb0mos739hsp7g:6379',
-    include=['app.tasks']
+    broker='rediss://red-ckvgp5eb0mos739hsp7g:mEzjJ1KfNYnB9V0hm5RPpeZ0DrS01wW3@oregon-redis.render.com:6379?ssl_cert_reqs=CERT_NONE',
+    include=['tasks']
 )
 
-schedule = crontab(hour=21, minute=45, day_of_week=0)
+schedule = crontab(hour=4, minute=40, day_of_week=1)
 
 celery.conf.beat_schedule = {
     'save-discover-weekly': {
-        'task': 'app.tasks.save_discover_weekly_task',
+        'task': 'tasks.save_discover_weekly_task',
         'schedule': schedule,
     },
 }

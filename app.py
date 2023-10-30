@@ -8,8 +8,8 @@ import spotipy
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 app.config['SESSION_COOKIE_NAME'] = 'Spotify Cookie'
-app.config['CELERY_BROKER_URL'] = 'redis://red-ckvgp5eb0mos739hsp7g:6379'
-app.config['CELERY_RESULT_BACKEND'] = 'redis://red-ckvgp5eb0mos739hsp7g:6379'
+app.config['CELERY_BROKER_URL'] = 'rediss://red-ckvgp5eb0mos739hsp7g:mEzjJ1KfNYnB9V0hm5RPpeZ0DrS01wW3@oregon-redis.render.com:6379?ssl_cert_reqs=CERT_NONE'
+app.config['result_backend'] = 'rediss://red-ckvgp5eb0mos739hsp7g:mEzjJ1KfNYnB9V0hm5RPpeZ0DrS01wW3@oregon-redis.render.com:6379?ssl_cert_reqs=CERT_NONE'
 
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
