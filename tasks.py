@@ -2,6 +2,7 @@ from celery import Celery
 import spotipy
 from spotify import get_token
 from flask import current_app as app
+import logging
 
 celery = Celery(
     'app', broker='redis://',
@@ -11,12 +12,15 @@ celery = Celery(
 @celery.task
 def save_discover_weekly_task():
     with app.app_context():
+        logger = logging.getLogger(__name__)
+        logger.info("save_discover_weekly_task started")
         token_info = get_token()
         sp = spotipy.Spotify(auth=token_info['access_token'])
         weekly_finds_playlist_id = None
         discover_weekly_playlist_id = None
         user_id = sp.current_user()['id']
 
+        logger.info("scanning playlists...")
         current_playlists = sp.current_user_playlists()['items']
         for playlist in current_playlists:
             if playlist['name'] == 'Discover Weekly':
