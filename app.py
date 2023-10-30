@@ -46,7 +46,7 @@ def save_discover_weekly():
 
     if not discover_weekly_playlist_id:
         final_message = 'Be sure to have Discover Weekly in your library, plus right-click it and click "Add to profile"'
-        error_message = 'Discover Weekly playlist not found'
+        error_message = 'Discover&lt;br&gt;Weekly&lt;br&gt;playlist&lt;br&gt;not found'
         return render_template('response.html', error_message=error_message, final_message=final_message)
 
     save_discover_weekly_task.delay()
