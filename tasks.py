@@ -1,7 +1,8 @@
 from celery import Celery
 import spotipy
 from spotify import get_token
-from flask import current_app as app
+from app import create_app
+from flask import current_app
 import logging
 
 celery = Celery(
@@ -11,6 +12,7 @@ celery = Celery(
 
 @celery.task
 def save_discover_weekly_task():
+    app = create_app()
     with app.app_context():
         logger = logging.getLogger(__name__)
         logger.info("save_discover_weekly_task started")
