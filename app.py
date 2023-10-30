@@ -1,10 +1,8 @@
-from dotenv import load_dotenv
-import os
-from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, request, url_for, session, redirect, render_template
 from flask_sslify import SSLify
 from celery_config import Celery
 from tasks import save_discover_weekly_task
+from spotify import create_spotify_oauth
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
@@ -40,18 +38,6 @@ def save_discover_weekly():
     success_message = 'Thank you for using our app!'
     final_message = 'Your task to save Discover Weekly has been scheduled'
     return render_template('response.html', success_message=success_message, final_message=final_message)
-
-
-def create_spotify_oauth():
-    load_dotenv()
-    return SpotifyOAuth(
-        client_id=os.getenv("CLIENT_ID"),
-        client_secret=os.getenv("CLIENT_SECRET"),
-        redirect_uri="https://marianas-spotify-api.onrender.com/redirect",
-        scope='user-library-read playlist-modify-public playlist-modify-private',
-        cache_path=".cache",
-        show_dialog=True
-    )
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ import spotipy
 from flask import render_template
 from flask import session, render_template
 import time
-from app import create_spotify_oauth
+from spotify import create_spotify_oauth
 
 celery = Celery('app', broker='redis://localhost:6379/0',
                 include=['app.tasks'])
