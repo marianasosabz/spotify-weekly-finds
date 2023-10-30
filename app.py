@@ -50,8 +50,8 @@ def save_discover_weekly():
         return render_template('response.html', error_message=error_message, final_message=final_message)
 
     save_discover_weekly_task.delay()
-    success_message = 'Thank you for using our app!'
-    final_message = 'Your task to save Discover Weekly has been scheduled'
+    success_message = 'Your task to save Discover Weekly has been scheduled'
+    final_message = 'Thank you for using our app!'
     return render_template('response.html', success_message=success_message, final_message=final_message)
 
 
