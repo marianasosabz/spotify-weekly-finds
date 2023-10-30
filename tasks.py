@@ -4,7 +4,7 @@ from spotify import get_token
 from flask import current_app as app
 
 celery = Celery(
-    'app', broker='rediss://red-ckvgp5eb0mos739hsp7g:mEzjJ1KfNYnB9V0hm5RPpeZ0DrS01wW3@oregon-redis.render.com:6379?ssl_cert_reqs=CERT_NONE',
+    'app', broker='redis://',
     include=['app.tasks'])
 
 
