@@ -51,6 +51,8 @@ def save_discover_weekly():
         tracks = playlist['tracks']['items']
         for item in tracks:
             track = item['track']
+            if track is None:
+                continue  # handle error of empty playlists
             artists = track['artists']
             for artist in artists:
                 if artist['name'] == 'Taylor Swift' and 'Version' not in track['name']:
