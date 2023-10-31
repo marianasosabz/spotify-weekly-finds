@@ -75,7 +75,7 @@ def save_discover_weekly():
         return render_template('response.html', error_message=error_message, final_message=final_message)
 
     final_message = 'Thank you for using our app!'
-    success_message = 'Total tracks changed: {total}'
+    success_message = f'Total tracks changed: {total}'
     return render_template('response.html', success_message=success_message, final_message=final_message)
 
 
