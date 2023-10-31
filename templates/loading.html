@@ -41,7 +41,7 @@
                             .then(function (data) {
                                 var success_message = data.success_message;
                                 var final_message = data.final_message;
-                                window.location.href = '/response.html?success_message=' + success_message + '&final_message=' + final_message;
+                                window.location.href = '/response?success_message=' + success_message + '&final_message=' + final_message;
                             })
                             .catch(function (error) {
                                 console.error('An error occurred:', error);
