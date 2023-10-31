@@ -26,14 +26,19 @@
             </div>
         </nav>
         <header class="py-5">
-            <div class="lds-ring">
-                <div></div>
-                <div></div>
-            </div>
-            <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">We are scanning and updating your
-                    playlists
-                </span></h1>
-            <div class="fs-3 fw-light text-muted">This can take some minutes, feel free to change tabs
+            <div class="container px-5 pb-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-xxl-5">
+                        <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">We are scanning and
+                                updating your playlists
+                            </span></h1>
+                        <div class="fs-3 fw-light text-muted">This can take some minutes, feel free to change tabs
+                        </div>
+                    </div>
+                    <div class="col-xxl-7">
+                        <div class="spinning-wheel"></div>
+                    </div>
+
         </header>
         <script>
             fetch('/taylorsVersion')
