@@ -86,6 +86,13 @@ def get_messages():
     return jsonify(success_message=success_message, final_message=final_message)
 
 
+@app.route('/response')
+def response():
+    success_message = request.args.get('success_message')
+    final_message = request.args.get('final_message')
+    return render_template('response.html', success_message=success_message, final_message=final_message)
+
+
 def get_token():
     token_info = session.get(TOKEN_INFO, None)
     if not token_info:
