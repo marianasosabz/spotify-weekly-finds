@@ -81,16 +81,16 @@ def taylors_version():
 
 @app.route('/get-messages')
 def get_messages():
-    success_message = "Your success message from Python"
+    submessage = "Your success message from Python"
     final_message = "Your final message from Python"
-    return jsonify(success_message=success_message, final_message=final_message)
+    return jsonify(submessage=submessage, final_message=final_message)
 
 
 @app.route('/response')
 def response():
-    success_message = request.args.get('success_message')
+    submessage = request.args.get('success_message')
     final_message = request.args.get('final_message')
-    return render_template('response.html', success_message=success_message, final_message=final_message)
+    return render_template('response.html', submessage=submessage, final_message=final_message)
 
 
 def get_token():
