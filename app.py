@@ -16,7 +16,6 @@ TOKEN_INFO = 'token_info'
 @app.route('/')
 def login():
     auth_url = create_spotify_oauth().get_authorize_url()
-    # Render the HTML template and pass data
     return render_template('index.html', auth_url=auth_url)
 
 
@@ -39,36 +38,42 @@ def save_discover_weekly():
         return render_template('response.html', error_message=error_message, final_message=final_message)
 
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    weekly_finds_playlist_id = None
-    discover_weekly_playlist_id = None
-    user_id = sp.current_user()['id']
 
-    current_playlists = sp.current_user_playlists()['items']
-    for playlist in current_playlists:
-        if (playlist['name'] == 'Discover Weekly'):
-            discover_weekly_playlist_id = playlist['id']
-        if (playlist['name'] == 'Weekly Finds'):
-            weekly_finds_playlist_id = playlist['id']
+    results = sp.current_user_playlists()
+    playlists = []
+    for _, item in enumerate(results['items']):
+        playlists.append(sp.playlist(item['id']))
 
-    if not discover_weekly_playlist_id:
-        final_message = 'Be sure to right click your Discover Weekly and click "Add to profile"'
-        error_message = 'Discover Weekly not found'
+    total = 0
+    for playlist in playlists:
+        to_add_uris = []
+        to_remove_ids = []
+        tracks = playlist['tracks']['items']
+        for item in tracks:
+            track = item['track']
+            artists = track['artists']
+            for artist in artists:
+                if artist['name'] == 'Taylor Swift' and 'Version' not in track['name']:
+                    search_str = track['name'] + ' (Taylor\'s Version)'
+                    result = sp.search(search_str)['tracks']['items']
+                    if len(result) != 0:
+                        result = result[0]
+                        if '(Taylor\'s Version)' in result['name'] or 'Taylor’s Version' in result['name']:
+                            to_add_uris.append(result['uri'])
+                            to_remove_ids.append(track['id'])
+        if len(to_remove_ids) != 0:
+            total += len(to_remove_ids)
+            sp.playlist_remove_all_occurrences_of_items(
+                playlist['id'], to_remove_ids)
+            sp.playlist_add_items(playlist['id'], to_add_uris)
+
+    if total == 0:
+        final_message = 'No tracks needing to be switched were found'
+        error_message = 'Yay! You were already up to date on Taylor\'s Versions'
         return render_template('response.html', error_message=error_message, final_message=final_message)
 
-    if not weekly_finds_playlist_id:
-        new_playlist = sp.user_playlist_create(user_id, 'Weekly Finds', True)
-        weekly_finds_playlist_id = new_playlist['id']
-
-    discover_weekly_playlist = sp.playlist_items(discover_weekly_playlist_id)
-    song_uris = []
-    for song in discover_weekly_playlist['items']:
-        song_uri = song['track']['uri']
-        song_uris.append(song_uri)
-
-    sp.user_playlist_add_tracks(user_id, weekly_finds_playlist_id, song_uris)
-
     final_message = 'Thank you for using our app!'
-    success_message = 'Discover Weekly songs added successfully'
+    success_message = 'Total tracks changed: {total}'
     return render_template('response.html', success_message=success_message, final_message=final_message)
 
 
