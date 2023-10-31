@@ -13715,8 +13715,8 @@ html {
 }
 
 .spinning-wheel {
-  width: 50px;
-  height: 50px;
+  width: 200px;
+  height: 200px;
   border: 6px solid blue;
   border-top: 6px solid #800080;
   border-radius: 50%;
