@@ -25,11 +25,11 @@ def redirect_page():
     code = request.args.get('code')
     token_info = create_spotify_oauth().get_access_token(code)
     session[TOKEN_INFO] = token_info
-    return redirect(url_for('save_discover_weekly', _external=True))
+    return render_template('loading.html')
 
 
-@app.route('/saveDiscoverWeekly')
-def save_discover_weekly():
+@app.route('/taylorsVersion')
+def taylors_version():
     try:
         token_info = get_token()
     except:
