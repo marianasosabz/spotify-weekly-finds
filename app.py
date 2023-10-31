@@ -88,7 +88,7 @@ def get_messages():
 
 @app.route('/response')
 def response():
-    submessage = request.args.get('success_message')
+    submessage = request.args.get('submessage')
     final_message = request.args.get('final_message')
     return render_template('response.html', submessage=submessage, final_message=final_message)
 
