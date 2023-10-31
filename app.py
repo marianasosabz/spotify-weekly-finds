@@ -34,8 +34,8 @@ def taylors_version():
         token_info = get_token()
     except:
         final_message = 'Go back to our homepage'
-        error_message = 'You are not logged in'
-        return render_template('response.html', error_message=error_message, final_message=final_message)
+        submessage = 'You are not logged in'
+        return render_template('response.html', submessage=submessage, final_message=final_message)
 
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
@@ -71,12 +71,12 @@ def taylors_version():
 
     if total == 0:
         final_message = 'Yay! No outdated tracks found'
-        error_message = 'You were already up to date on all Taylor\'s Versions'
-        return render_template('response.html', error_message=error_message, final_message=final_message)
+        submessage = 'You were already up to date on all Taylor\'s Versions'
+        return render_template('response.html', submessage=submessage, final_message=final_message)
 
     final_message = 'Thank you for using our app!'
-    success_message = f'Total tracks changed: {total}'
-    return render_template('response.html', success_message=success_message, final_message=final_message)
+    submessage = f'Total tracks changed: {total}'
+    return render_template('response.html', submessage=submessage, final_message=final_message)
 
 
 def get_token():
