@@ -70,8 +70,8 @@ def taylors_version():
             sp.playlist_add_items(playlist['id'], to_add_uris)
 
     if total == 0:
-        final_message = 'No tracks needing to be switched were found'
-        error_message = 'Yay! You were already up to date on Taylor\'s Versions'
+        final_message = 'Yay! No outdated tracks found'
+        error_message = 'You were already up to date on all Taylor\'s Versions'
         return render_template('response.html', error_message=error_message, final_message=final_message)
 
     final_message = 'Thank you for using our app!'
