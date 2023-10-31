@@ -33,9 +33,9 @@ def taylors_version():
     try:
         token_info = get_token()
     except:
-        final_message = 'Go back to our homepage'
-        submessage = 'You are not logged in'
-        return render_template('response.html', submessage=submessage, final_message=final_message)
+        session['final_message'] = 'Go back to our homepage'
+        session['submessage'] = 'You are not logged in'
+        return render_template('response.html', submessage=session['submessage'], final_message=session['final_message'])
 
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
@@ -70,19 +70,19 @@ def taylors_version():
             sp.playlist_add_items(playlist['id'], to_add_uris)
 
     if total == 0:
-        final_message = 'Yay! No outdated tracks found'
-        submessage = 'You were already up to date on all Taylor\'s Versions'
-        return render_template('response.html', submessage=submessage, final_message=final_message)
+        session['final_message'] = 'Yay! No outdated tracks found'
+        session['submessage'] = 'You were already up to date on all Taylor\'s Versions'
+        return render_template('response.html', submessage=session['submessage'], final_message=session['final_message'])
 
-    final_message = 'Thank you for using our app!'
-    submessage = f'Total tracks changed: {total}'
-    return render_template('response.html', submessage=submessage, final_message=final_message)
+    session['final_message'] = 'Thank you for using our app!'
+    session['submessage'] = f'Total tracks changed: {total}'
+    return render_template('response.html', submessage=session['submessage'], final_message=session['final_message'])
 
 
 @app.route('/get-messages')
 def get_messages():
-    submessage = "Your success message from Python"
-    final_message = "Your final message from Python"
+    submessage = session.get('submessage', "Something went wrong on our side")
+    final_message = session.get('final_message', "Server down")
     return jsonify(submessage=submessage, final_message=final_message)
 
 
