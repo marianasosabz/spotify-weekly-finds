@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from flask import Flask, request, url_for, session, redirect, render_template
+from flask import Flask, request, url_for, session, redirect, render_template, jsonify
 from flask_sslify import SSLify
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
@@ -77,6 +77,13 @@ def taylors_version():
     final_message = 'Thank you for using our app!'
     submessage = f'Total tracks changed: {total}'
     return render_template('response.html', submessage=submessage, final_message=final_message)
+
+
+@app.route('/get-messages')
+def get_messages():
+    success_message = "Your success message from Python"
+    final_message = "Your final message from Python"
+    return jsonify(success_message=success_message, final_message=final_message)
 
 
 def get_token():

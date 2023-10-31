@@ -30,7 +30,22 @@
             fetch('/taylorsVersion')
                 .then(function (response) {
                     if (response.status === 200) {
-                        return render_template('response.html', success_message = success_message, final_message = final_message)
+                        fetch('/get-messages')
+                            .then(function (dataResponse) {
+                                if (dataResponse.ok) {
+                                    return dataResponse.json();
+                                } else {
+                                    throw new Error('Failed to fetch messages');
+                                }
+                            })
+                            .then(function (data) {
+                                var success_message = data.success_message;
+                                var final_message = data.final_message;
+                                window.location.href = '/response.html?success_message=' + success_message + '&final_message=' + final_message;
+                            })
+                            .catch(function (error) {
+                                console.error('An error occurred:', error);
+                            });
                     }
                 })
                 .catch(function (error) {
