@@ -54,15 +54,13 @@ def taylors_version():
             if track is None:
                 continue  # handle error of empty playlists
             artists = track['artists']
-            for artist in artists:
-                if artist['name'] == 'Taylor Swift' and 'Version' not in track['name']:
-                    search_str = track['name'] + ' (Taylor\'s Version)'
-                    result = sp.search(search_str)['tracks']['items']
-                    if len(result) != 0:
-                        result = result[0]
-                        if '(Taylor\'s Version)' in result['name'] or 'Taylor’s Version' in result['name']:
-                            to_add_uris.append(result['uri'])
-                            to_remove_ids.append(track['id'])
+            album = track['album']
+            if any(keyword in album['name'] for keyword in ['Fearless', 'Speak Now', 'Red', '1989']) and 'Version' not in album['name'] and any(artist['name'] == 'Taylor Swift' for artist in artists):
+                search_str = track['name'] + ' (Taylor\'s Version)'
+                result = sp.search(search_str)['tracks']['items']
+                result = result[0]
+                to_add_uris.append(result['uri'])
+                to_remove_ids.append(track['id'])
         if len(to_remove_ids) != 0:
             total += len(to_remove_ids)
             sp.playlist_remove_all_occurrences_of_items(
